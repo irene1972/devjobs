@@ -3,7 +3,7 @@ import express from 'express'
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
-import pkg from 'express-handlebars';
+import { engine } from 'express-handlebars';
 import bodyParser from 'body-parser';
 //import MongoStore from 'connect-mongo';
 import conectarDB from './config/db.js';
@@ -21,11 +21,9 @@ dotenv.config({path:'.env'});
 conectarDB();
 
 //habilitar handlebars como view
-app.engine('handlebars',
-    pkg({
-        defaultLayout:'layout'
-    })
-)
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', './views');
 
 app.use(express.static('public'));
 //app.use(express.static(path.join(__dirname,'public')));

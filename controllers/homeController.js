@@ -2,8 +2,8 @@ import Vacante from '../models/Vacante.js';
 
 const mostrarTrabajos=async(req,res,next)=>{
 
-    const vacantes=await Vacante.find();
-    console.log(vacantes);
+    const vacantes=await Vacante.find().lean();
+    //console.log(vacantes);
     if(!vacantes) return next();
 
     res.render('home',{

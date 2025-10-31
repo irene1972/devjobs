@@ -1,10 +1,11 @@
 import Vacante from '../models/Vacante.js';
+import {skills} from '../helpers/variables.js';
 
 const formularioNuevaVacante=(req,res)=>{
     res.render('nueva-vacante',{
         nombrePagina:'Nueva Vacante',
         tagline:'Llena el formulario y publica tu vacante',
-        skills:['HTML5', 'CSS3', 'CSSGrid', 'Flexbox', 'JavaScript', 'jQuery', 'Node', 'Angular', 'VueJS', 'ReactJS', 'React Hooks', 'Redux', 'Apollo', 'GraphQL', 'TypeScript', 'PHP', 'Laravel', 'Symfony', 'Python', 'Django', 'ORM', 'Sequelize', 'Mongoose', 'SQL', 'MVC', 'SASS', 'WordPress']
+        skills
     });
 }
 
@@ -21,7 +22,49 @@ const agregarVacante=async(req,res)=>{
     res.redirect(`/vacantes/${nuevaVacante.url}`);
 }
 
+const mostrarVacante=async(req,res,next)=>{
+    const url=req.params.url;
+    const vacante=await Vacante.findOne({url}).lean();
+    if(!vacante) return next();
+
+    res.render('vacante',{
+        nombrePagina:vacante.titulo,
+        barra:true,
+        vacante
+    });
+}
+
+const formEditarVacante=async(req,res,next)=>{
+    const url=req.params.url;
+    const vacante=await Vacante.findOne({url}).lean();
+    if(!vacante) return next();
+
+    res.render('editar-vacante',{
+        nombrePagina:`Editar - ${vacante.titulo}`,
+        barra:true,
+        vacante,
+        skills
+    });
+}
+
+const editarVacante=async(req,res)=>{
+    const url=req.params.url;
+    const vacanteActualizada=req.body;
+
+    vacanteActualizada.skills=req.body.skills.split(',');
+
+    const vacante=await Vacante.findOneAndUpdate({url},vacanteActualizada,{
+        new:true,
+        runValidators:true
+    });
+
+    res.redirect(`/vacantes/${vacante.url}`);
+}
+
 export {
     formularioNuevaVacante,
-    agregarVacante
+    agregarVacante,
+    mostrarVacante,
+    formEditarVacante,
+    editarVacante
 }
