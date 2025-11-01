@@ -11,6 +11,7 @@ import flash from 'connect-flash';
 import conectarDB from './config/db.js';
 //import path from 'path';
 import router from './routes/index.js';
+import passport from './config/passport.js';
 
 const app=express();
 
@@ -44,6 +45,9 @@ app.use(session({
     saveUninitialized:false,
     //store:new MongoStore({mongooseConnection:mongoose.connection})
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 //alertas y flash messages
 app.use(flash());

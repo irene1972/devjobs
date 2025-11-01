@@ -10,8 +10,14 @@ import {
 import { 
     formCrearCuenta,
     crearCuenta,
-    //validarRegistro
+    formIniciarSesion,
+    iniciarSesion
+
 } from '../controllers/usuarioController.js';
+import { 
+    autenticarUsuario,
+    mostrarPanel
+} from '../controllers/authController.js';
 
 const router=express.Router();
 
@@ -34,5 +40,14 @@ router.post('/crear-cuenta',
     //validarRegistro,
     crearCuenta
 );
+
+//iniciar sesión
+router.get('/iniciar-sesion', formIniciarSesion);
+router.post('/iniciar-sesion', 
+    autenticarUsuario,
+    iniciarSesion
+);
+
+router.get('/administracion', mostrarPanel);
 
 export default router;

@@ -106,8 +106,21 @@ const validarRegistro=(req,res)=>{
     next();
 }
 */
+
+const formIniciarSesion=(req,res)=>{
+    res.render('iniciar-sesion',{
+        nombrePagina: 'Inicia sesión en devJobs',
+        tagline:'Inicia sesión en devJobs y empieza a publicar tus vacantes gratis'
+    });
+}
+
+const iniciarSesion=(req,res)=>{
+
+}
+
 export {
     formCrearCuenta,
     crearCuenta,
-    //validarRegistro
+    formIniciarSesion,
+    iniciarSesion
 }

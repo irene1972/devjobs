@@ -24,6 +24,8 @@
     "handlebars-helper-ternary": "^1.0.0",
     "mongoose": "^8.19.2",
     "nodemon": "^1.18.10",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "shortid": "^2.2.14",
     "slug": "^1.0.0",
     "trix": "^2.1.15",

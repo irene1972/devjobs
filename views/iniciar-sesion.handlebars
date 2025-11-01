@@ -2,15 +2,7 @@
     {{#if error}}
     <div class="error alerta">{{error}}</div>
     {{/if}}
-    <form action="/crear-cuenta" method="POST" class="default-form">
-        <div class="campo">
-            <label for="">Nombre</label>
-            {{#if datos}}
-                <input type="text" name="nombre" placeholder="Tu Nombre" value="{{datos.nombre}}">
-            {{else}}
-                <input type="text" name="nombre" placeholder="Tu Nombre">
-            {{/if}}
-        </div>
+    <form action="/iniciar-sesion" method="POST" class="default-form">
         <div class="campo">
             <label for="">E-mail</label>
             {{#if datos}}
@@ -24,15 +16,12 @@
             <label for="">Password</label>
             <input type="password" name="password" placeholder="Tu Password">
         </div>
-        <div class="campo">
-            <label for="">Repetir Password</label>
-            <input type="password" name="confirmar" placeholder="Repetir Password">
-        </div>
         <div class="campo acciones">
-            <a href="/iniciar-sesion">Ir a Iniciar Sesión</a>
+            <a href="/crear-cuenta">Ir a Registrar Usuario</a>
+            <a href="/restablecer-password">Olvidé mi password</a>
         </div>
         <div class="campo">
-            <input type="submit" value="Crear Cuenta" class="btn btn-azul">
+            <input type="submit" value="Iniciar Sesión" class="btn btn-azul">
         </div>
     </form>
 </main>
