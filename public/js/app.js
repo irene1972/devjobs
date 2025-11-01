@@ -5,6 +5,14 @@ document.addEventListener('DOMContentLoaded',()=>{
     }
     skillsSeleccionados();
     contratoSeleccionado();
+
+    //limpiar las alertas
+    let alerta=document.querySelector('.error');
+    if(alerta){
+        setTimeout(()=>{
+            alerta.remove();
+        },3000);
+    }
 });
 
 const skillsClicked=new Set();
@@ -32,6 +40,7 @@ const agregarSkills=(e)=>{
 
 const skillsSeleccionados=()=>{
     const habilidades=document.querySelectorAll('.lista-conocimientos li');
+    if(document.querySelector('h3') && document.querySelector('h3').textContent==='Información General'){
     const seleccionadas=document.querySelector('#seleccionadas').value.split(',');
     //console.log(habilidades);
     
@@ -45,15 +54,19 @@ const skillsSeleccionados=()=>{
     const skillsSelected=document.querySelectorAll('.lista-conocimientos .activo');
     const skillsArray2=[...skillsSelected];
     document.querySelector('#skills').value=skillsArray2;
+    }
     
 }
 
 const contratoSeleccionado=()=>{
-    const contratoSelected=document.querySelector('#contr').value;
-    const opcionesContrato=document.querySelectorAll('select.contrato option');
-    opcionesContrato.forEach(opcion=>{
-        if(opcion.value===contratoSelected){
-            opcion.selected=true;
-        }
-    });
+    if(document.querySelector('h3') && document.querySelector('h3').textContent==='Información General'){
+        const contratoSelected=document.querySelector('#contr').value;
+        const opcionesContrato=document.querySelectorAll('select.contrato option');
+        opcionesContrato.forEach(opcion=>{
+            if(opcion.value===contratoSelected){
+                opcion.selected=true;
+            }
+        });
+    }
+    
 }

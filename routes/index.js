@@ -7,6 +7,11 @@ import {
     formEditarVacante,
     editarVacante
 } from '../controllers/vacanteController.js';
+import { 
+    formCrearCuenta,
+    crearCuenta,
+    //validarRegistro
+} from '../controllers/usuarioController.js';
 
 const router=express.Router();
 
@@ -22,5 +27,12 @@ router.get('/vacantes/:url',mostrarVacante);
 //editar vacante
 router.get('/vacantes/editar/:url',formEditarVacante);
 router.post('/vacantes/editar/:url',editarVacante);
+
+//crear cuentas
+router.get('/crear-cuenta',formCrearCuenta);
+router.post('/crear-cuenta',
+    //validarRegistro,
+    crearCuenta
+);
 
 export default router;

@@ -91,7 +91,7 @@ h3 {
 
 
 .site-header {
-    min-height: 400px;
+    /*min-height: 400px;*/
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -516,4 +516,10 @@ p.candidatos {
 .enviar-datos p {
     color: white;
     font-size: 1.8rem;
+}
+.contenido-principal,.contenedor,.sin-padding{
+    padding-top: 0;
+}
+.ancho-fijo{
+    width: 25rem;
 }

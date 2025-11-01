@@ -5,6 +5,8 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import { engine } from 'express-handlebars';
 import bodyParser from 'body-parser';
+import ExpressValidator from 'express-validator';
+import flash from 'connect-flash';
 //import MongoStore from 'connect-mongo';
 import conectarDB from './config/db.js';
 //import path from 'path';
@@ -15,6 +17,9 @@ const app=express();
 //habilitar body-parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
+
+//validación de campos
+app.use(ExpressValidator());
 
 dotenv.config({path:'.env'});
 
@@ -39,6 +44,15 @@ app.use(session({
     saveUninitialized:false,
     //store:new MongoStore({mongooseConnection:mongoose.connection})
 }));
+
+//alertas y flash messages
+app.use(flash());
+
+//crear nuestro middleware
+app.use((req,res,next)=>{
+    res.locals.mensajes=req.flash();
+    next();
+});
 
 app.use('/',router);
 
