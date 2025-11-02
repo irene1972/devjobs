@@ -5,6 +5,7 @@ import {
     validarVacante,
     agregarVacante,
     mostrarVacante,
+    eliminarVacante,
     formEditarVacante,
     editarVacante
 } from '../controllers/vacanteController.js';
@@ -54,10 +55,15 @@ router.post('/vacantes/editar/:url',
     editarVacante
 );
 
+//eliminar vacante
+router.delete('/vacantes/eliminar/:id',
+    //verificarUsuario,
+    eliminarVacante
+);
+
 //crear cuentas
 router.get('/crear-cuenta',formCrearCuenta);
 router.post('/crear-cuenta',
-    //validarRegistro,
     crearCuenta
 );
 

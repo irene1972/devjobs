@@ -1,3 +1,6 @@
+import axios from 'axios';
+import Swal from 'sweetalert2';
+
 document.addEventListener('DOMContentLoaded',()=>{
     const skills=document.querySelector('.lista-conocimientos');
     if(skills){
@@ -19,6 +22,11 @@ document.addEventListener('DOMContentLoaded',()=>{
         setTimeout(()=>{
             alertaExito.remove();
         },3000);
+    }
+
+    if(document.querySelector('h2').textContent==='Panel de Administración'){
+        const btnEliminar=document.querySelector('#eliminar');
+        btnEliminar.addEventListener('click', eliminarVacante);
     }
 });
 
@@ -91,4 +99,44 @@ const contratoSeleccionado=()=>{
         });
     }
     
+}
+
+const eliminarVacante=(e)=>{
+    e.preventDefault();
+    
+    //eliminar por axios y sweetalert2
+    Swal.fire({
+        title: "¿Confirmar Eliminación?",
+        text: "Una vez eliminada no se puede recuperar",
+        //icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
+        }).then((result) => {
+        if (result.isConfirmed) {
+            //enviar la petición con fetch
+            const url=`${location.origin}/vacantes/eliminar/${e.target.dataset.eliminar}`;
+            //console.log(url);
+            fetch(url,{
+                method:'DELETE',
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            })
+                .then(response=response.json())
+                .then(data=>{
+                    console.log(data);
+                })
+                .catch(error=console.log(error));
+/*
+            Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success"
+            });
+            */
+        }
+        });
 }

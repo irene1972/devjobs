@@ -79,6 +79,20 @@ const mostrarVacante=async(req,res,next)=>{
         vacante
     });
 }
+/*
+const eliminarVacante=async(req,res)=>{
+    const vacanteId=req.params.id;
+    const vacanteEliminada=await Vacante.deleteOne({_id:vacanteId});
+    res.redirect('/administracion');
+}
+*/
+
+const eliminarVacante=async(req,res)=>{
+    const {id}=req.params.id;
+    console.log(id);
+    res.json({irene:'esta es mi respuesta'});
+    
+}
 
 const formEditarVacante=async(req,res,next)=>{
     const usuarioId=req.cookies._id;
@@ -118,6 +132,7 @@ export {
     validarVacante,
     agregarVacante,
     mostrarVacante,
+    eliminarVacante,
     formEditarVacante,
     editarVacante
 }
