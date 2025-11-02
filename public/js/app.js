@@ -26,7 +26,9 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     if(document.querySelector('h2').textContent==='Panel de Administración'){
         const btnEliminar=document.querySelector('#eliminar');
-        btnEliminar.addEventListener('click', eliminarVacante);
+        if(btnEliminar){
+            btnEliminar.addEventListener('click', eliminarVacante);
+        } 
     }
 });
 
@@ -118,25 +120,35 @@ const eliminarVacante=(e)=>{
         if (result.isConfirmed) {
             //enviar la petición con fetch
             const url=`${location.origin}/vacantes/eliminar/${e.target.dataset.eliminar}`;
-            //console.log(url);
+            console.log(url);
             fetch(url,{
                 method:'DELETE',
                 headers:{
                     'Content-Type':'application/json'
                 }
             })
-                .then(response=response.json())
+                .then(response=>response.json())
                 .then(data=>{
                     console.log(data);
+                    if(data.estado===200){
+                        Swal.fire({
+                            title: "Eliminado",
+                            text: data.mensaje,
+                            icon: "success"
+                        });
+                        e.target.parentElement.parentElement.parentElement.removeChild(e.target.parentElement.parentElement);
+                    }
+
                 })
-                .catch(error=>console.log(error));
-/*
-            Swal.fire({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
-            icon: "success"
-            });
-            */
+                .catch(error=>{
+                    console.log(error);
+                    Swal.fire({
+                            title: "Error",
+                            text: 'Hubo un error',
+                            icon: "error"
+                        });
+                });
+
         }
         });
 }

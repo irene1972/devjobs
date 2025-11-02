@@ -1,6 +1,6 @@
-import Usuario from "../models/Usuario.js";
-import Vacante from "../models/Vacante.js";
 import bcrypt from "bcrypt";
+import __dirname from 'path';
+import Usuario from "../models/Usuario.js";
 
 const formCrearCuenta=(req,res)=>{
     res.render('crear-cuenta',{
@@ -175,7 +175,7 @@ const validarPerfil=async(req,res,next)=>{
     if(req.body.password){
         req.sanitizeBody('password').escape();
     }
-
+    
     //validar
     const usuarioId=req.cookies._id;
     const {nombre,email,password}=req.body;
@@ -231,31 +231,38 @@ const editarPerfil=async(req,res)=>{
 
     usuario.nombre=nombre;
     usuario.email=email;
+    
     if(password) {
         const hash=await bcrypt.hash(password,12);
         usuario.password=hash;
     };
 
+    if(req.file){
+        usuario.imagen=req.file.filename;
+        //usuario.imagen='kg7kqdeo0i81j937p6i7.jpg';
+    }
+
     try {
-        const ususarioActualizado=await Usuario.findOneAndUpdate({_id:usuarioId},usuario,{
+        
+        const usuarioActualizado=await Usuario.findOneAndUpdate({_id:usuarioId},usuario,{
             new:true,
-            runValidators:true
+            runValidators:true,
+            upsert:true
         });
 
         return res.render('editar-perfil',{
         nombrePagina: 'Edita tu perfil en devJobs',
         exito:'Los datos se guardaron correctamente',
         cerrarSesion:true,
-        nombre: ususarioActualizado.nombre,
+        nombre: usuarioActualizado.nombre,
         });
 
     } catch (error) {
         console.log(error);
     }
-        
-    
     
 }
+
 
 export {
     formCrearCuenta,
@@ -264,5 +271,5 @@ export {
     iniciarSesion,
     formEditarPerfil,
     validarPerfil,
-    editarPerfil
+    editarPerfil,
 }

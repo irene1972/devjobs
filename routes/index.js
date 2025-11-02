@@ -25,6 +25,7 @@ import {
     mostrarPanel,
     cerrarSesion
 } from '../controllers/authController.js';
+import upload from '../helpers/subirImagen.js';
 
 const router=express.Router();
 
@@ -93,7 +94,10 @@ router.get('/editar-perfil',
 router.post('/editar-perfil',
     verificarUsuario,
     validarPerfil,
+    upload.single('imagen'),
     editarPerfil
 );
+
+
 
 export default router;

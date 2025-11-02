@@ -16,7 +16,7 @@ import passport from './config/passport.js';
 const app=express();
 
 //habilitar body-parser
-app.use(bodyParser.json());
+app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({extended:true}));
 
 //validación de campos

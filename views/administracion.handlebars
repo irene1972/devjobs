@@ -6,35 +6,23 @@
     </div>
     <h2>Lista de Vacantes</h2>
 
-    {{#if vacantes.length}}
-
-        {{#each vacantes}}
-            <div class="vacante panel-administracion">
-                <div class="caja">
-                    <h3>{{empresa}}</h3>
-                    <p class="puesto">{{titulo}}</p>
-                </div>
-                <div class="caja centrar-vertical">
-                    <a href="/candidatos/{{_id}}" class="btn btn-amarillo">Candidatos</a>
-                    <a href="/vacantes/editar/{{url}}" class="btn btn-verde editar">Editar</a>
-                    <a href="#" data-eliminar="{{_id}}" class="btn btn-rojo" id="eliminar">Eliminar</a>
-                </div>
-                <!--
-                <div class="caja">
-                    <p class="etiqueta">Ubicación</p>
-                    <p class="nombre">{{ubicacion}}</p>
-                </div>
-                <div class="caja">
-                    <p class="etiqueta">Contrato</p>
-                    <p class="nombre contrato">{{contrato}}</p>
-                </div>
-                <div class="caja centrar-vertical">
-                    <a href="/vacantes/{{url}}" class="btn btn-verde">Más Info</a>
-                </div>
-                -->
-            </div><!--vacante-->
-        {{/each}}
-    {{else}}
-        <p>No hay vacantes</p>
-    {{/if}}
+    <div class="panel-administracion">
+        {{#if vacantes.length}}
+            {{#each vacantes}}
+                <div class="vacante">
+                    <div class="caja">
+                        <h3>{{empresa}}</h3>
+                        <p class="puesto">{{titulo}}</p>
+                    </div>
+                    <div class="caja centrar-vertical">
+                        <a href="/candidatos/{{_id}}" class="btn btn-amarillo">Candidatos</a>
+                        <a href="/vacantes/editar/{{url}}" class="btn btn-verde editar">Editar</a>
+                        <a href="#" data-eliminar="{{_id}}" class="btn btn-rojo" id="eliminar">Eliminar</a>
+                    </div>
+                </div><!--vacante-->
+            {{/each}}
+        {{else}}
+            <p>No hay vacantes</p>
+        {{/if}}
+    </div>
 </main>

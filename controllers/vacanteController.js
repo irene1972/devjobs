@@ -79,18 +79,27 @@ const mostrarVacante=async(req,res,next)=>{
         vacante
     });
 }
-/*
-const eliminarVacante=async(req,res)=>{
-    const vacanteId=req.params.id;
-    const vacanteEliminada=await Vacante.deleteOne({_id:vacanteId});
-    res.redirect('/administracion');
-}
-*/
 
 const eliminarVacante=async(req,res)=>{
-    const {id}=req.params.id;
-    console.log(id);
-    res.json({irene:'esta es mi respuesta'});
+    const usuarioId=req.cookies._id;
+    const vacanteId=req.params.id;
+    const vacante=await Vacante.findById(vacanteId);
+
+    if(usuarioId.toString() !== vacante.autor.toString()) return res.status(403).json({error:'Acción no permitida'});
+
+
+    try {
+        await Vacante.deleteOne({_id:vacanteId});
+        res.status(200).json({
+                            mensaje:'La vacante fue eliminada correctamente',
+                            estado:200
+                            });
+    } catch (error) {
+      console.log(error);  
+    }
+    
+    
+    
     
 }
 
