@@ -2,7 +2,7 @@ import express from 'express';
 import {mostrarTrabajos} from '../controllers/homeController.js';
 import { 
     formularioNuevaVacante,
-    validarNuevaVacante,
+    validarVacante,
     agregarVacante,
     mostrarVacante,
     formEditarVacante,
@@ -35,7 +35,7 @@ router.get('/vacantes/nueva',
 );
 router.post('/vacantes/nueva',
     verificarUsuario,
-    validarNuevaVacante,
+    validarVacante,
     agregarVacante
 );
 
@@ -49,6 +49,7 @@ router.get('/vacantes/editar/:url',
 );
 router.post('/vacantes/editar/:url',
     verificarUsuario,
+    validarVacante,
     editarVacante
 );
 

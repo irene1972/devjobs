@@ -1,4 +1,10 @@
 <main class="contenedor">
+    {{#if exito}}
+        <div class="alerta">{{exito}}</div>
+    {{/if}}
+    {{#if error}}
+        <div class="error alerta">{{error}}</div>
+    {{/if}}
     <form action="/vacantes/editar/{{vacante.url}}" method="POST" class="default-form">
         <H3>Información General</H3>
         <div class="campo">
@@ -15,7 +21,7 @@
         </div>
         <div class="campo">
             <label for="salario">Salario (USD)</label>
-            <input type="text" name="salario" id="salario" placeholder="Ej. 500 USD" value="{{vacante.salario}}" required>
+            <input type="text" name="salario" id="salario" placeholder="Ej. 500 USD" value="{{vacante.salario}}">
         </div>
         <div class="campo">
             <label for="contrato">Contrato</label>

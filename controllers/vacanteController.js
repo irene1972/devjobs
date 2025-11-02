@@ -1,6 +1,6 @@
 import Vacante from '../models/Vacante.js';
-import {skills} from '../helpers/variables.js';
 import Usuario from '../models/Usuario.js';
+import {skills} from '../helpers/variables.js';
 
 const formularioNuevaVacante=async(req,res)=>{
     const usuarioId=req.cookies._id;
@@ -15,14 +15,21 @@ const formularioNuevaVacante=async(req,res)=>{
     });
 }
 
-//validar los campos de las nuevas vacantes
-const validarNuevaVacante=async(req,res,next)=>{
+//validar y sanitizar(con express-validator) los campos de las nuevas vacantes
+const validarVacante=async(req,res,next)=>{
+    req.sanitizeBody('titulo').escape();
+    req.sanitizeBody('empresa').escape();
+    req.sanitizeBody('ubicacion').escape();
+    req.sanitizeBody('salario').escape();
+    req.sanitizeBody('contrato').escape();
+    req.sanitizeBody('skills').escape();
+
     const usuarioId=req.cookies._id;
     const {titulo,empresa,ubicacion,salario,contrato,descripcion,skills}=req.body;
     const datos=req.body;
     const usuario=await Usuario.findById(usuarioId);
 
-    if(!titulo || !empresa || !ubicacion || !salario || !contrato || !descripcion){
+    if(!titulo || !empresa || !ubicacion || !contrato || !descripcion){
         return res.render('nueva-vacante',{
         nombrePagina:'Nueva Vacante',
         tagline:'Llena el formulario y publica tu vacante',
@@ -41,18 +48,25 @@ const agregarVacante=async(req,res)=>{
     const vacante=req.body;
     
     //usuario autor de la vacante
-    vacante.autor=req.user._id;
+    vacante.autor=req.cookies._id;
     
     //crear array de habilidades
     vacante.skills=req.body.skills.split(',');
 
     //almacenarlo en la bd
-    const nuevaVacante=await Vacante.create(vacante);
-
-    res.redirect(`/vacantes/${nuevaVacante.url}`);
+    try {
+       const nuevaVacante=await Vacante.create(vacante); 
+       res.redirect(`/vacantes/${nuevaVacante.url}`);
+    } catch (error) {
+        console.log(error);
+    }
+    
 }
 
 const mostrarVacante=async(req,res,next)=>{
+    const usuarioId=req.cookies._id;
+    const usuario=await Usuario.findById(usuarioId);
+
     const url=req.params.url;
     const vacante=await Vacante.findOne({url}).lean();
     if(!vacante) return next();
@@ -60,6 +74,8 @@ const mostrarVacante=async(req,res,next)=>{
     res.render('vacante',{
         nombrePagina:vacante.titulo,
         barra:true,
+        cerrarSesion:true,
+        nombre: usuario.nombre,
         vacante
     });
 }
@@ -83,6 +99,7 @@ const formEditarVacante=async(req,res,next)=>{
 }
 
 const editarVacante=async(req,res)=>{
+    //todo: validación campos (tener en cuenta que salario es opcional)
     const url=req.params.url;
     const vacanteActualizada=req.body;
 
@@ -98,7 +115,7 @@ const editarVacante=async(req,res)=>{
 
 export {
     formularioNuevaVacante,
-    validarNuevaVacante,
+    validarVacante,
     agregarVacante,
     mostrarVacante,
     formEditarVacante,

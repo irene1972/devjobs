@@ -25,7 +25,18 @@ document.addEventListener('DOMContentLoaded',()=>{
 const skillsClicked=new Set();
 
 const agregarSkills=(e)=>{
-    console.log(e.target);
+    //Si ya hay seleccionadas previamente se mantienen
+    const habilidades=document.querySelectorAll('.lista-conocimientos li');
+    if(document.querySelector('#seleccionadas')){
+        const seleccionadas=document.querySelector('#seleccionadas').value.split(',');
+        //console.log(seleccionadas);
+        seleccionadas.forEach(seleccionada=>{
+            //agregarlo al set y agregar la clase
+            skillsClicked.add(seleccionada);
+        });
+    }
+
+    //si hacemos click en una skill se agrega a las seleccionadas
     if(e.target.tagName==='LI'){
         if(e.target.classList.contains('activo')){
             //quitarlo del set y quitar la clase
@@ -36,7 +47,7 @@ const agregarSkills=(e)=>{
             //agregarlo al set y agregar la clase
             skillsClicked.add(e.target.textContent);
             e.target.classList.add('activo');   
-            console.log(Array.from(skillsClicked)); 
+            //console.log(Array.from(skillsClicked)); 
             const skillsArray=[...Array.from(skillsClicked)];
             document.querySelector('#skills').value=skillsArray;        
         }
