@@ -1,4 +1,6 @@
 import Usuario from "../models/Usuario.js";
+import Vacante from "../models/Vacante.js";
+import bcrypt from "bcrypt";
 
 const formCrearCuenta=(req,res)=>{
     res.render('crear-cuenta',{
@@ -114,13 +116,136 @@ const formIniciarSesion=(req,res)=>{
     });
 }
 
-const iniciarSesion=(req,res)=>{
+const iniciarSesion=async(req,res,next)=>{
+    //validación de campos vacíos
+    const {email,password}=req.body;
+    if(!email || !password){
+        return res.render('iniciar-sesion',{
+        nombrePagina: 'Inicia sesión en devJobs',
+        tagline:'Inicia sesión en devJobs y empieza a publicar tus vacantes gratis',
+        error:'Los dos campos son obligatorios',
+        email
+        });
+    }
+    const usuario=await Usuario.findOne({email});
 
+    //validación de que exista el usuario
+    if(!usuario){
+        return res.render('iniciar-sesion',{
+        nombrePagina: 'Inicia sesión en devJobs',
+        tagline:'Inicia sesión en devJobs y empieza a publicar tus vacantes gratis',
+        error:'El usuario no existe, pruebe a registrarse',
+        email
+        });
+    }
+
+    //validación de que el password coincida
+    if(!bcrypt.compareSync(password,usuario.password)){
+        return res.render('iniciar-sesion',{
+        nombrePagina: 'Inicia sesión en devJobs',
+        tagline:'Inicia sesión en devJobs y empieza a publicar tus vacantes gratis',
+        error:'El password no coincide',
+        email
+        });
+    }
+
+    res.cookie('_id',usuario._id,{
+        httpOnly:true,
+        //secure:true,
+        //sameSite:true
+    });
+    next();
+}
+
+const formEditarPerfil=async(req,res)=>{
+    const usuarioId=req.cookies._id;
+    const usuario=await Usuario.findById(usuarioId).lean();
+    return res.render('editar-perfil',{
+        nombrePagina: 'Edita tu perfil en devJobs',
+        usuario,
+        cerrarSesion:true,
+        nombre: usuario.nombre,
+        });
+}
+
+const editarPerfil=async(req,res)=>{
+    const usuarioId=req.cookies._id;
+    const {nombre,email,password}=req.body;
+    const usuario={};
+    if(!nombre || !email){
+        usuario.nombre=nombre;
+        usuario.email=email;
+        return res.render('editar-perfil',{
+        nombrePagina: 'Edita tu perfil en devJobs',
+        usuario,
+        cerrarSesion:true,
+        nombre: usuario.nombre,
+        error:'Los campos NOMBRE e E-MAIL son obligatorios'
+        });
+    }
+
+    //validar que el email sea válido
+    const regex=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if(!regex.test(email)){
+        usuario.nombre=nombre;
+        usuario.email=email;
+        return res.render('editar-perfil',{
+        nombrePagina: 'Edita tu perfil en devJobs',
+        usuario,
+        cerrarSesion:true,
+        nombre: usuario.nombre,
+        error:'El email no es válido'
+        });
+    }
+
+    const existeEmail=await Usuario.findOne({email});
+    const usuarioBD=await Usuario.findById(usuarioId); 
+    
+    if(usuarioBD.email !== email && existeEmail){
+        usuario.nombre=nombre;
+        usuario.email=email;
+        return res.render('editar-perfil',{
+        nombrePagina: 'Edita tu perfil en devJobs',
+        usuario,
+        cerrarSesion:true,
+        nombre: usuario.nombre,
+        error:'El email ya está registrado'
+        });
+    }
+
+    usuario.nombre=nombre;
+    usuario.email=email;
+    if(password) {
+        const hash=await bcrypt.hash(password,12);
+        usuario.password=hash;
+    };
+
+    try {
+        const ususarioActualizado=await Usuario.findOneAndUpdate({_id:usuarioId},usuario,{
+            new:true,
+            runValidators:true
+        });
+
+        return res.render('editar-perfil',{
+        nombrePagina: 'Edita tu perfil en devJobs',
+        exito:'Los datos se guardaron correctamente',
+        cerrarSesion:true,
+        nombre: usuario.nombre,
+        });
+
+    } catch (error) {
+        console.log(error);
+    }
+        
+    
+    
 }
 
 export {
     formCrearCuenta,
     crearCuenta,
     formIniciarSesion,
-    iniciarSesion
+    iniciarSesion,
+    formEditarPerfil,
+    editarPerfil
 }

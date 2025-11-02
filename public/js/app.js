@@ -13,6 +13,13 @@ document.addEventListener('DOMContentLoaded',()=>{
             alerta.remove();
         },3000);
     }
+
+    let alertaExito=document.querySelector('.alerta');
+    if(alertaExito){
+        setTimeout(()=>{
+            alertaExito.remove();
+        },3000);
+    }
 });
 
 const skillsClicked=new Set();
@@ -41,19 +48,23 @@ const agregarSkills=(e)=>{
 const skillsSeleccionados=()=>{
     const habilidades=document.querySelectorAll('.lista-conocimientos li');
     if(document.querySelector('h3') && document.querySelector('h3').textContent==='Información General'){
-    const seleccionadas=document.querySelector('#seleccionadas').value.split(',');
-    //console.log(habilidades);
     
-    habilidades.forEach(habilidad=>{
-        //console.log(habilidad.textContent);
-        if(seleccionadas.includes(habilidad.textContent)){
-            //console.log(habilidad);
-            habilidad.classList.add('activo');
+        if(document.querySelector('#seleccionadas')){
+            const seleccionadas=document.querySelector('#seleccionadas').value.split(',');
+            console.log(seleccionadas);
+            //console.log(habilidades);
+            
+            habilidades.forEach(habilidad=>{
+                //console.log(habilidad.textContent);
+                if(seleccionadas.includes(habilidad.textContent)){
+                    //console.log(habilidad);
+                    habilidad.classList.add('activo');
+                }
+            });
+            const skillsSelected=document.querySelectorAll('.lista-conocimientos .activo');
+            const skillsArray2=[...skillsSelected];
+            document.querySelector('#skills').value=skillsArray2;
         }
-    });
-    const skillsSelected=document.querySelectorAll('.lista-conocimientos .activo');
-    const skillsArray2=[...skillsSelected];
-    document.querySelector('#skills').value=skillsArray2;
     }
     
 }

@@ -2,6 +2,7 @@ import express from 'express';
 import {mostrarTrabajos} from '../controllers/homeController.js';
 import { 
     formularioNuevaVacante,
+    validarNuevaVacante,
     agregarVacante,
     mostrarVacante,
     formEditarVacante,
@@ -11,13 +12,16 @@ import {
     formCrearCuenta,
     crearCuenta,
     formIniciarSesion,
-    iniciarSesion
+    iniciarSesion,
+    formEditarPerfil,
+    editarPerfil
 
 } from '../controllers/usuarioController.js';
 import { 
     autenticarUsuario,
     verificarUsuario,
-    mostrarPanel
+    mostrarPanel,
+    cerrarSesion
 } from '../controllers/authController.js';
 
 const router=express.Router();
@@ -31,6 +35,7 @@ router.get('/vacantes/nueva',
 );
 router.post('/vacantes/nueva',
     verificarUsuario,
+    validarNuevaVacante,
     agregarVacante
 );
 
@@ -57,13 +62,29 @@ router.post('/crear-cuenta',
 //iniciar sesión
 router.get('/iniciar-sesion', formIniciarSesion);
 router.post('/iniciar-sesion', 
-    autenticarUsuario,
-    iniciarSesion
+    iniciarSesion,
+    autenticarUsuario
+);
+
+//cerrar sesión
+router.get('/cerrar-sesion',
+    verificarUsuario,
+    cerrarSesion
 );
 
 router.get('/administracion', 
     verificarUsuario,
     mostrarPanel
+);
+
+//editar perfil
+router.get('/editar-perfil',
+    verificarUsuario,
+    formEditarPerfil
+);
+router.post('/editar-perfil',
+    verificarUsuario,
+    editarPerfil
 );
 
 export default router;

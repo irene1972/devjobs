@@ -1,12 +1,15 @@
 <main class="contenedor">
+    {{#if exito}}
+    <div class="alerta">{{exito}}</div>
+    {{/if}}
     {{#if error}}
     <div class="error alerta">{{error}}</div>
     {{/if}}
     <form action="/iniciar-sesion" method="POST" class="default-form">
         <div class="campo">
             <label for="">E-mail</label>
-            {{#if datos}}
-                <input type="email" name="email" placeholder="Tu E-mail" value="{{datos.email}}">
+            {{#if email}}
+                <input type="email" name="email" placeholder="Tu E-mail" value="{{email}}">
             {{else}}
                 <input type="email" name="email" placeholder="Tu E-mail">
             {{/if}}

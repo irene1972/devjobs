@@ -468,6 +468,7 @@ p.candidatos {
     text-transform: uppercase;
     font-weight: 700;
     margin-top: .3rem;
+    background-color: green;
 }
 .correcto {
     background-color: #00C897;
@@ -522,4 +523,7 @@ p.candidatos {
 }
 .ancho-fijo{
     width: 25rem;
+}
+.editar{
+    margin: 0 1rem;
 }
