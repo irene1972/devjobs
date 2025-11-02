@@ -168,7 +168,15 @@ const formEditarPerfil=async(req,res)=>{
         });
 }
 
-const editarPerfil=async(req,res)=>{
+const validarPerfil=async(req,res,next)=>{
+    //sanitizar con express-validator
+    req.sanitizeBody('nombre').escape();
+    req.sanitizeBody('email').escape();
+    if(req.body.password){
+        req.sanitizeBody('password').escape();
+    }
+
+    //validar
     const usuarioId=req.cookies._id;
     const {nombre,email,password}=req.body;
     const usuario={};
@@ -180,7 +188,7 @@ const editarPerfil=async(req,res)=>{
         usuario,
         cerrarSesion:true,
         nombre: usuario.nombre,
-        error:'Los campos NOMBRE e E-MAIL son obligatorios'
+        error:'Los campos NOMBRE y E-MAIL son obligatorios'
         });
     }
 
@@ -213,6 +221,14 @@ const editarPerfil=async(req,res)=>{
         });
     }
 
+    next();
+}
+
+const editarPerfil=async(req,res)=>{
+    const usuarioId=req.cookies._id;
+    const {nombre,email,password}=req.body; 
+    const usuario={};
+
     usuario.nombre=nombre;
     usuario.email=email;
     if(password) {
@@ -230,7 +246,7 @@ const editarPerfil=async(req,res)=>{
         nombrePagina: 'Edita tu perfil en devJobs',
         exito:'Los datos se guardaron correctamente',
         cerrarSesion:true,
-        nombre: usuario.nombre,
+        nombre: ususarioActualizado.nombre,
         });
 
     } catch (error) {
@@ -247,5 +263,6 @@ export {
     formIniciarSesion,
     iniciarSesion,
     formEditarPerfil,
+    validarPerfil,
     editarPerfil
 }

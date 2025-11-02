@@ -14,6 +14,7 @@ import {
     formIniciarSesion,
     iniciarSesion,
     formEditarPerfil,
+    validarPerfil,
     editarPerfil
 
 } from '../controllers/usuarioController.js';
@@ -85,6 +86,7 @@ router.get('/editar-perfil',
 );
 router.post('/editar-perfil',
     verificarUsuario,
+    validarPerfil,
     editarPerfil
 );
 
