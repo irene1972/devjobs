@@ -35,6 +35,7 @@ const mostrarPanel=async(req,res)=>{
         tagline:'Crea y administra tus vacantes desde aquí',
         cerrarSesion:true,
         nombre: usuario.nombre,
+        imagen:usuario.imagen,
         vacantes
     });
     

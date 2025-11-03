@@ -1,6 +1,11 @@
 <main class="lista-vacantes">
     <h2>Lista de Vacantes</h2>
-
+    {{#if exito}}
+        <div class="alerta">{{exito}}</div>
+    {{/if}}
+    {{#if error}}
+        <div class="error alerta">{{error}}</div>
+    {{/if}}
     {{#if vacantes.length}}
 
         {{#each vacantes}}

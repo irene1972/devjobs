@@ -165,6 +165,7 @@ const formEditarPerfil=async(req,res)=>{
         usuario,
         cerrarSesion:true,
         nombre: usuario.nombre,
+        imagen:usuario.imagen
         });
 }
 

@@ -68,7 +68,7 @@ const mostrarVacante=async(req,res,next)=>{
     const usuario=await Usuario.findById(usuarioId);
 
     const url=req.params.url;
-    const vacante=await Vacante.findOne({url}).lean();
+    const vacante=await Vacante.findOne({url}).populate('autor').lean();
     if(!vacante) return next();
 
     res.render('vacante',{
@@ -136,6 +136,51 @@ const editarVacante=async(req,res)=>{
     res.redirect(`/vacantes/${vacante.url}`);
 }
 
+const contactar=async(req,res,next)=>{
+    const url=req.params.url;
+    const {nombre,email}=req.body;
+    const vacante=await Vacante.findOne({url});
+    const vacantes=await Vacante.find().lean();
+    if(!vacante) return next();
+    const nuevoCandidato={
+        nombre,
+        email,
+        cv:req.file.filename
+    }
+    vacante.candidatos.push(nuevoCandidato);
+    await Vacante.findByIdAndUpdate(vacante._id,vacante,{
+        new:true,
+        runValidators:true,
+        upsert:true
+    });
+    res.render('home',{
+        nombrePagina:'devJobs',
+        tagline:'Encuentra y Publica Trabajos para Desarrolladores Web',
+        barra:true,
+        boton:true,
+        vacantes,
+        exito:'Tus datos se enviaron correctamente'
+    });
+}
+
+const mostrarCandidatos=async(req,res,next)=>{
+    const usuarioLogueadoId=req.cookies._id;
+    const usuarioLogueado=await Usuario.findById(usuarioLogueadoId);
+    const {id}=req.params;
+    const vacante=await Vacante.findById(id).lean();
+    
+    if(!vacante) return next();
+    if(vacante.autor.toString() !== usuarioLogueadoId) return next();
+
+    res.render('candidatos',{
+        nombrePagina:`Candidatos Vacante - ${vacante.titulo}`,
+        cerrarSesion:true,
+        nombre:usuarioLogueado.nombre,
+        imagen:usuarioLogueado.imagen,
+        candidatos:vacante.candidatos
+    });
+}
+
 export {
     formularioNuevaVacante,
     validarVacante,
@@ -143,5 +188,7 @@ export {
     mostrarVacante,
     eliminarVacante,
     formEditarVacante,
-    editarVacante
+    editarVacante,
+    contactar,
+    mostrarCandidatos
 }

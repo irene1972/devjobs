@@ -7,7 +7,9 @@ import {
     mostrarVacante,
     eliminarVacante,
     formEditarVacante,
-    editarVacante
+    editarVacante,
+    contactar,
+    mostrarCandidatos
 } from '../controllers/vacanteController.js';
 import { 
     formCrearCuenta,
@@ -26,6 +28,7 @@ import {
     cerrarSesion
 } from '../controllers/authController.js';
 import upload from '../helpers/subirImagen.js';
+import uploadPdf from '../helpers/subirPdf.js';
 
 const router=express.Router();
 
@@ -98,6 +101,16 @@ router.post('/editar-perfil',
     editarPerfil
 );
 
+//recibir mensajes de candidatos
+router.post('/vacantes/:url',
+    uploadPdf.single('cv'),
+    contactar
+);
 
+//muestra los candidatos por vacante
+router.get('/candidatos/:id',
+    verificarUsuario,
+    mostrarCandidatos
+);
 
 export default router;
