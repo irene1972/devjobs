@@ -9,7 +9,8 @@ import {
     formEditarVacante,
     editarVacante,
     contactar,
-    mostrarCandidatos
+    mostrarCandidatos,
+    buscarVacante
 } from '../controllers/vacanteController.js';
 import { 
     formCrearCuenta,
@@ -25,7 +26,11 @@ import {
     autenticarUsuario,
     verificarUsuario,
     mostrarPanel,
-    cerrarSesion
+    cerrarSesion,
+    formRestablecerPassword,
+    enviarToken,
+    restablecerPassword,
+    guardarPassword
 } from '../controllers/authController.js';
 import upload from '../helpers/subirImagen.js';
 import uploadPdf from '../helpers/subirPdf.js';
@@ -84,6 +89,14 @@ router.get('/cerrar-sesion',
     cerrarSesion
 );
 
+//olvidé mi password
+router.get('/restablecer-password',formRestablecerPassword);
+router.post('/restablecer-password',enviarToken);
+
+//resetear password
+router.get('/restablecer-password/:token',restablecerPassword);
+router.post('/restablecer-password/:token',guardarPassword);
+
 router.get('/administracion', 
     verificarUsuario,
     mostrarPanel
@@ -112,5 +125,9 @@ router.get('/candidatos/:id',
     verificarUsuario,
     mostrarCandidatos
 );
+
+
+//buscador de vacantes
+router.post('/buscador',buscarVacante)
 
 export default router;

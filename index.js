@@ -7,6 +7,7 @@ import { engine } from 'express-handlebars';
 import bodyParser from 'body-parser';
 import ExpressValidator from 'express-validator';
 import flash from 'connect-flash';
+import createError from 'http-errors';
 //import MongoStore from 'connect-mongo';
 import conectarDB from './config/db.js';
 //import path from 'path';
@@ -59,5 +60,20 @@ app.use((req,res,next)=>{
 });
 
 app.use('/',router);
+
+//404 página no encontrada
+app.use((req,res,next)=>{
+    next(createError(404,'No encontrada'));
+})
+
+//administración de los errores
+app.use((error,req,res)=>{
+    res.locals.mensaje=error.message;
+    const status=error.status || 500;
+    res.locals.status=status;
+    res.status(status);
+
+    res.render('error');
+});
 
 app.listen(process.env.PUERTO);
